@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat with AI</title>
+    <style></style>
+  </head>
+  <body>
+    <h1>Chat with AI</h1>
+    <div id="chat-box"></div>
+    <input type="text" id="message-input" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+      async function sendMessage() {
+        const messageInput = document.getElementById("message-input");
+        const message = messageInput.value;
+
+        const response = await fetch("/converse", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ message }),
+        });
+
+        const data = await response.text();
+        displayMessage(message, "Human");
+        displayMessage(data, "AI");
+
+        // Clear the message input after sending
+        messageInput.value = "";
+      }
+
+      function displayMessage(message, sender) {
+        const chatBox = document.getElementById("chat-box");
+        const messageElement = document.createElement("div");
+        messageElement.innerHTML = `${sender}: ${message}`;
+        chatBox.appendChild(messageElement);
+      }
+    </script>
+  </body>
+</html>
