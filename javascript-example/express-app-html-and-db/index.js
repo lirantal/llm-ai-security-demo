@@ -36,6 +36,23 @@ function init() {
 const conversationContextPrompt =
   "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.\n\nHuman: Hello, who are you?\nAI: I am an AI created by OpenAI. How can I help you today?\nHuman: ";
 
+const jwt = require("jsonwebtoken");
+
+function authenticateUser(req, res) {
+  const token = req.headers["authorization"];
+  if (!token) {
+    return res.status(401).send("Access denied. No token provided.");
+  }
+
+  try {
+    const decoded = jwt.verify(token, "secretKey");
+    req.user = decoded;
+    next();
+  } catch (ex) {
+    res.status(400).send("Invalid token.");
+  }
+}
+
 app.post("/converse", async (req, res) => {
   const message = req.body.message;
 
@@ -49,18 +66,12 @@ app.post("/converse", async (req, res) => {
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0.6,
-    stop: [" Human:", " AI:"],
   });
 
-  // const aiResponse = ;/
-
-  // The user's message as input may contain SQL injection attacks
-  // so we sanitize it before saving it to the database:
-  const sanitizedMessage = message.replace(/'/g, "''");
-  // but does it help??
+  let responseText = response.data.choices[0].message.content;
 
   db.exec(
-    `INSERT INTO conversations (user_message, ai_response) VALUES ('${sanitizedMessage}', '${response.choices[0].message.content}'`,
+    'INSERT INTO conversations (ai_response) VALUES ("' + responseText + '")',
     (err) => {
       if (err) {
         console.error("Error saving conversation to database:", err);
