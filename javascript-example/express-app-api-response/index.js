@@ -1,5 +1,5 @@
 const express = require("express");
-const OpenAI = require("openai");
+const { OpenAI } = require("openai");
 const bp = require("body-parser");
 
 const openai = new OpenAI();

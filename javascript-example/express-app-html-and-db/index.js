@@ -1,5 +1,5 @@
 const express = require("express");
-const OpenAI = require("openai");
+const { OpenAI } = require("openai");
 const bp = require("body-parser");
 const sqlite3 = require("sqlite3").verbose();
 
