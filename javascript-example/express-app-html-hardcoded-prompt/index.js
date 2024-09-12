@@ -3,14 +3,21 @@ const { OpenAI } = require("openai");
 const bp = require("body-parser");
 const path = require("path");
 
+const JOKES_DB = [
+  "XSS security vulnerabilities",
+  "GenAI and RAG security issues",
+  "Developers and security people"
+]
+
 const openai = new OpenAI();
 const app = express();
 
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 
+const jokePulledFromDatabase = JOKES_DB[Math.floor(Math.random() * JOKES_DB.length)];
 const conversationContextPrompt =
-  "You are a comedian assistant who is witty, creative, funny and smart.\n\nPlease generate a dad joke for me:";
+  `You are a comedian assistant who is witty, creative, funny and smart.\n\nPlease generate a joke for me on this topic: ${jokePulledFromDatabase}`;
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, "public")));
