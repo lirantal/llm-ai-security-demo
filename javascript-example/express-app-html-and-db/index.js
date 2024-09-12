@@ -43,31 +43,37 @@ const conversationContextPrompt =
 app.post("/converse", async (req, res) => {
   const message = req.body.message;
 
-  const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
-    messages: [
-      { role: "system", content: conversationContextPrompt + message },
-    ],
-    temperature: 0.9,
-    max_tokens: 150,
-    top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0.6,
-  });
+  let response;
+  try {
+    response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        { role: "system", content: conversationContextPrompt + message },
+      ],
+      temperature: 0.9,
+      max_tokens: 150,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0.6,
+    });
+  } catch (error) {
+    console.error("Error calling OpenAI API:", error);
+  }
 
-  let responseText = response.data.choices[0].message.content;
+  let responseText = response.choices[0].message.content;
 
+  const logQuery = 'INSERT INTO conversations (ai_response) VALUES ("' + responseText + '")';
+  console.log(logQuery);
   db.exec(
-    'INSERT INTO conversations (ai_response) VALUES ("' + responseText + '")',
+    logQuery,
     (err) => {
       if (err) {
         console.error("Error saving conversation to database:", err);
-        console.log(err);
       }
     }
   );
 
-  res.send(aiResponse);
+  res.send(responseText);
 });
 
 init();
