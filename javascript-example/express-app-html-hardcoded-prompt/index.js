@@ -17,9 +17,9 @@ app.use(bp.urlencoded({ extended: true }));
 
 const jokePulledFromDatabase = JOKES_DB[Math.floor(Math.random() * JOKES_DB.length)];
 const conversationContextPrompt =
-  `You are a comedian assistant who is witty, creative, funny and smart.\n\nPlease generate a joke for me on this topic: ${jokePulledFromDatabase}`;
+  `You are a comedian assistant who is witty, creative, funny and smart.\n\n
+  Please generate a joke for me on this topic: ${jokePulledFromDatabase}`;
 
-// Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, "public")));
 
 app.post("/api/jokes", async (req, res) => {
