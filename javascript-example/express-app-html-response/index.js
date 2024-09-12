@@ -10,7 +10,11 @@ app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 
 const conversationContextPrompt =
-  "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.\n\nHuman: Hello, who are you?\nAI: I am an AI created by OpenAI. How can I help you today?\nHuman: ";
+  `The following is a conversation with an AI assistant.
+   The assistant is helpful, creative, clever, and very friendly.\n\n
+   Human: Hello, who are you?\n
+   AI: I am an AI created by OpenAI. How can I help you today?\n
+   Human: `;
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, "public")));
