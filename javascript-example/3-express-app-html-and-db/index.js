@@ -9,18 +9,15 @@ const app = express();
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 
-// Connect to the SQLite database
 const db = new sqlite3.Database("conversations.db");
 
 function init() {
-  // Create a table to store conversations if not exists
   db.run(`CREATE TABLE IF NOT EXISTS conversations (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_message TEXT,
         ai_response TEXT
   )`);
 
-  // Create a users table to serve as an example
   db.exec(
     `CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -63,7 +60,6 @@ app.post("/converse", async (req, res) => {
   let responseText = response.choices[0].message.content;
 
   const logQuery = 'INSERT INTO conversations (ai_response) VALUES ("' + responseText + '")';
-  console.log(logQuery);
   db.exec(
     logQuery,
     (err) => {
