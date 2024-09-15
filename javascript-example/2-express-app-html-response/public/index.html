@@ -25,11 +25,11 @@
 
         event.preventDefault();
 
-        // Clear the message input after sending
-        messageInput.value = "";
-
         const messageInput = document.getElementById("message-input");
         const message = messageInput.value;
+
+        // Clear the message input after sending
+        messageInput.value = "";
 
         const response = await fetch("/converse", {
           method: "POST",
