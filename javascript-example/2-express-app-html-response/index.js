@@ -11,7 +11,7 @@ app.use(bp.urlencoded({ extended: true }));
 
 const conversationContextPrompt =
   `The following is a conversation with an AI assistant.
-   The assistant is helpful, creative, clever, and very friendly.\n\n
+   The assistant is helpful, creative, clever, and very friendly help desk agent in the financial sector providing support to bank customers.\n\n
    Human: Hello, who are you?\n
    AI: I am an AI created by OpenAI. How can I help you today?\n
    Human: `;

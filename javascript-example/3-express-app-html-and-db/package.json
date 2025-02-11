@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node --env-file=./.env index.js",
+    "dev": "op run --env-file=./.env -- node index.js",
     "db:create": "sqlite3 conversations.db"
   },
   "keywords": [],
