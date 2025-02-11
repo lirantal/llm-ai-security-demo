@@ -29,4 +29,4 @@ const pdfBytes = await pdfDoc.save()
 
 // write to file
 
-await fs.writeFile('./uploads/mal.pdf', pdfBytes)
+await fs.writeFile('./uploads/example.pdf', pdfBytes)

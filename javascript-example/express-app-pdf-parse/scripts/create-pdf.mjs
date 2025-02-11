@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import path from 'node:path';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
 async function createBisaCreditStatement(customerName, customerAddress, salaryIncome, bills) {
@@ -6,7 +7,7 @@ async function createBisaCreditStatement(customerName, customerAddress, salaryIn
   const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
   const timesRomanBoldFont = await pdfDoc.embedFont(StandardFonts.TimesRomanBold);
 
-  const logoBytes = await fs.readFile('./placeholder_logo.png');
+  const logoBytes = await fs.readFile(path.join(import.meta.dirname, 'placeholder_logo.png'));
   const logoImage = await pdfDoc.embedPng(logoBytes);
 
   const page = pdfDoc.addPage();
@@ -87,7 +88,7 @@ async function createBisaCreditStatement(customerName, customerAddress, salaryIn
   });
 
 
-  const managerSignatureBytes = await fs.readFile('./manager_signature.png');
+  const managerSignatureBytes = await fs.readFile(path.join(import.meta.dirname, 'manager_signature.png'));
   const managerSignature = await pdfDoc.embedPng(managerSignatureBytes);
 
   page.drawImage(managerSignature, {
@@ -141,21 +142,37 @@ function drawTable(page, x, y, font, fontSize, data) {
   }
 }
 
-async function generateAndSavePdf() {
-const customerName = "John Doe";
-const customerAddress = "123 Elm Street, Anytown";
-const salaryIncome = [["Salary", 5000]];
-const bills = [
-  ["Mortgage", 1500],
-  ["Utilities", 200],
-  ["Groceries", 300],
-  ["Gas", 100],
-];
-
+async function generateAndSavePdf_Alice() {
+  const customerName = "Alice Copperfield";
+  const customerAddress = "31337 Baker Street, London, England";
+  const salaryIncome = [["Salary", 980]];
+  const bills = [
+    ["Mortgage", 2500],
+    ["Utilities", 400],
+    ["Groceries", 600],
+    ["Gas", 140],
+  ];
 
   const pdfBytes = await createBisaCreditStatement(customerName, customerAddress, salaryIncome, bills);
-  await fs.writeFile('./uploads/bisa_credit_statement.pdf', pdfBytes);
+  await fs.writeFile(path.join(import.meta.dirname, '../uploads/alice-copperfield-credit-proof.pdf'), pdfBytes);
   console.log('PDF created successfully!');
 }
 
-generateAndSavePdf();
+async function generateAndSavePdf_John() {
+  const customerName = "John Doe";
+  const customerAddress = "123 Anystreet, Uptown, New York";
+  const salaryIncome = [["Salary", 5750]];
+  const bills = [
+    ["Mortgage", 2600],
+    ["Utilities", 300],
+    ["Groceries", 200],
+    ["Gas", 100],
+  ];
+
+  const pdfBytes = await createBisaCreditStatement(customerName, customerAddress, salaryIncome, bills);
+  await fs.writeFile(path.join(import.meta.dirname, '../uploads/john-doe-credit-proof.pdf'), pdfBytes);
+  console.log('PDF created successfully!');
+}
+
+await generateAndSavePdf_Alice();
+await generateAndSavePdf_John();

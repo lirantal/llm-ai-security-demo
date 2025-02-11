@@ -2,8 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 
-// const file = "mal";
-const file = "mal-bisa_credit_statement";
+const file = process.argv[2];
 
 async function extractTextFromPDF(pdfPath) {
   const pdfData = await fs.readFile(pdfPath);
@@ -29,7 +28,7 @@ async function extractTextFromPDF(pdfPath) {
 }
 
 async function main() {
-  const pdfPath = `./uploads/${file}.pdf`;
+  const pdfPath = path.join(process.cwd(), file);
   const text = await extractTextFromPDF(pdfPath);
   console.log(text);
 }
