@@ -16,7 +16,7 @@ async function modifyPdf() {
   const firstPage = pages[0]
   const { width, height } = firstPage.getSize()
   firstPage.drawText(promptInjection, {
-    x: 0,
+    x: width / 2,
     y: height,
     size: 1,
     font: helveticaFont,
