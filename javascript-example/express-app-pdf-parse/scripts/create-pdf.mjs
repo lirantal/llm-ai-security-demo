@@ -82,7 +82,7 @@ async function createBisaCreditStatement(customerName, customerAddress, salaryIn
   const totalExpenses = bills.reduce((sum, bill) => sum + bill[1], 0);
   page.drawText(`Total Monthly Expenses: $${totalExpenses.toFixed(2)}`, {
     x: xMargin,
-    y: height - yMargin - 390, // Adjust position
+    y: height - yMargin - 450, // Adjust position
     font: timesRomanBoldFont,
     size: fontSize,
   });
@@ -145,12 +145,15 @@ function drawTable(page, x, y, font, fontSize, data) {
 async function generateAndSavePdf_Alice() {
   const customerName = "Alice Copperfield";
   const customerAddress = "31337 Baker Street, London, England";
-  const salaryIncome = [["Salary", 980]];
+  const salaryIncome = [["Salary", 480]];
   const bills = [
     ["Mortgage", 2500],
     ["Utilities", 400],
     ["Groceries", 600],
-    ["Gas", 140],
+    ["Car Loan", 540],
+    ["Business Loan", 972],
+    ["Night School", 220],
+    ["Gas", 640],
   ];
 
   const pdfBytes = await createBisaCreditStatement(customerName, customerAddress, salaryIncome, bills);
