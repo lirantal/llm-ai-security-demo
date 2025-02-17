@@ -5,6 +5,7 @@ import path from "node:path";
 const openai = new OpenAI();
 
 async function getParsedTextFromImage(imagePath) {
+  // IDEA: create your own tshirt with custom text here: https://www.spreadshirt.com/create-your-own?productType=210
   const imageData = fs.readFileSync(imagePath);
   const base64Image = imageData.toString('base64');
 
