@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "op run --env-file=./.env -- node index.js",
-    "dev2": "op run --env-file=./.env -- node simple-test.js"
+    "dev": "op run --env-file=./.env -- node app.js"
   },
   "keywords": [],
   "author": "",
