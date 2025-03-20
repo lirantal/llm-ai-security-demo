@@ -2,6 +2,7 @@ const express = require("express");
 const { OpenAI } = require("openai");
 const bp = require("body-parser");
 const sqlite3 = require("sqlite3").verbose();
+const sqlite = require("sqlite");
 
 const openai = new OpenAI();
 const app = express();
@@ -9,24 +10,29 @@ const app = express();
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 
-const db = new sqlite3.Database("conversations.db");
+let db;
 
-function init() {
-  db.run(`CREATE TABLE IF NOT EXISTS conversations (
+async function init() {
+  db = await sqlite.open({
+    filename: 'conversations.db',
+    driver: sqlite3.Database
+  });
+
+  await db.exec(`CREATE TABLE IF NOT EXISTS conversations (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_message TEXT,
         ai_response TEXT
   )`);
 
-  db.exec(
+  await db.exec(
     `CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         email TEXT,
         role TEXT
-  );
-  INSERT INTO users (name, email, role) VALUES ('John Doe', 'john@example.com', 'user');
-  `
+    );
+    INSERT INTO users (name, email, role) VALUES ('John Doe', 'john@example.com', 'user');
+    `
   );
 }
 
@@ -60,20 +66,17 @@ app.post("/converse", async (req, res) => {
   let responseText = response.choices[0].message.content;
 
   const logQuery = 'INSERT INTO conversations (ai_response) VALUES ("' + responseText + '")';
-  db.exec(
-    logQuery,
-    (err) => {
-      if (err) {
-        console.error("Error saving conversation to database:", err);
-      }
-    }
-  );
+  try {
+    await db.exec(logQuery);
+  } catch (err) {
+    console.error("Error saving conversation to database:", err);
+  }
 
   res.send(responseText);
 });
 
-init();
-
-app.listen(4000, () => {
-  console.log("Conversational AI assistant listening on port 4000!");
+init().then(() => {
+  app.listen(4000, () => {
+    console.log("Conversational AI assistant listening on port 4000!");
+  });
 });
